@@ -53,7 +53,7 @@ articleView.handleCategoryFilter = function() {
   //       Be sure to reset the #author-filter while you are at it!
   $('#category-filter').on('change', function() {
     if ($(this).val()) {
-      var $selectedAuthor = $('article[data-attribue="' + $(this).val() + '"]');
+      var $selectedAuthor = $('article[data-category="' + $(this).val() + '"]');
 
       $('article').not($selectedAuthor).hide();
     } else {
@@ -89,4 +89,5 @@ articleView.setTeasers = function() {
 $(document).ready(function(){
   articleView.populateFilters();
   articleView.handleAuthorFilter();
+  articleView.handleCategoryFilter();
 });
