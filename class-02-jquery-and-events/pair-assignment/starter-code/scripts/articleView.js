@@ -10,6 +10,7 @@ articleView.populateFilters = function() {
       //       text to create the option tag (in a variable named `optionTag`),
       //       that we can append to the #author-filter select element.
       //       YAY, DOM manipulation!
+
       var val = $(this).find('address a').text();
       var optionTag = '<option value="' + val + '">' + val + '</option>';
       $('#author-filter').append(optionTag);
@@ -17,6 +18,7 @@ articleView.populateFilters = function() {
       // DONE: Similar to the above, but...
       //       Avoid duplicates! We don't want to append the category name if the select
       //       already has this category as an option!
+
       val = $(this).attr('data-category');
       optionTag = '<option value="' + val + '">' + val + '</option>';
       if ($('#category-filter option[value="' + val + '"]').length === 0) {
@@ -32,13 +34,15 @@ articleView.handleAuthorFilter = function() {
       // TODO: If the select box was changed to an option that has a value, we need to hide all the articles,
       //       and then show just the ones that match for the author that was selected.
       //       Use an "attribute selector" to find those articles, and fade them in for the reader.
+      var $selectedAuthor = $('article[data-attribute="' + $(this).val() + '"]');
 
+      $('article').not($selectedAuthor).hide();
     } else {
       // TODO: If the select box was changed to an option that is blank, we should
       //       show all the articles, except the one article we are using as a template.
-
+      $('article').not('.template').show();
     }
-    $('#category-filter').val('');
+    $('#author-filter').val('');
   });
 };
 
@@ -47,7 +51,16 @@ articleView.handleCategoryFilter = function() {
   //       When an option with a value is selected, hide all the articles, then reveal the matches.
   //       When the blank (default) option is selected, show all the articles, except for the template.
   //       Be sure to reset the #author-filter while you are at it!
+  $('#category-filter').on('change', function() {
+    if ($(this).val()) {
+      var $selectedAuthor = $('article[data-attribue="' + $(this).val() + '"]');
 
+      $('article').not($selectedAuthor).hide();
+    } else {
+      $('article').not('.template').show();
+    }
+    $('#category-filter').val('');
+  });
 };
 
 articleView.handleMainNav = function() {
@@ -73,4 +86,7 @@ articleView.setTeasers = function() {
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
-$();
+$(document).ready(function(){
+  articleView.populateFilters();
+  articleView.handleAuthorFilter();
+});
